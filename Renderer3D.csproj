@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Controls.cs" />
     <Compile Include="Engine\Mesh.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\SceneObject.cs" />

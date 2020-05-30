@@ -50,8 +50,8 @@ namespace Renderer3D.Engine
         public void Render() 
         {
             List<Triangle> trisToRender = scene.CollectTris();
-            
 
+            viewport.ClearViewport();
             foreach(Triangle t in trisToRender)
             {
                 //t.p[0].z += 3f;

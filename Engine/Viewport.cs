@@ -18,6 +18,7 @@ namespace Renderer3D.Engine
         public Viewport(int width, int height)
         {
             viewport = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
+
             this.width = width;
             this.height = height;
         }
@@ -29,6 +30,14 @@ namespace Renderer3D.Engine
                 return;
             }
             if (row >= height)
+            {
+                return;
+            }
+            if (column < 0)
+            {
+                return;
+            }
+            if (row < 0)
             {
                 return;
             }
@@ -65,13 +74,22 @@ namespace Renderer3D.Engine
                 viewport.Unlock();
             }
 
-            
+
         }
 
         public void DrawLine(int x1, int y1, int x2, int y2, Color color)
         {
-            
-            if (x1 > x2)
+
+            if (x2 <= x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            if (y2 < y1)
             {
                 int tmp = x1;
                 x1 = x2;
@@ -81,51 +99,56 @@ namespace Renderer3D.Engine
                 y2 = tmp;
             }
 
-            //if (x1 < 0)
-            //{
-               
-            //    x2 += Math.Abs(x1);
-            //    x1 = 0;
-            //}
-            //if (y1 < 0)
-            //{
-                
-            //    y2 += Math.Abs(y1);
-            //    y1 = 0;
-            //}
-
-
-            float dy, dx, x, y, m;
-            dy = y2 - y1;
-            dx = x2 - x1;
-            m = dy / dx;
-            y = y1;
-            x = x1;
-
-            if (Math.Abs(m) < 1)
+            if (y2 - y1 > x2 - x1)
             {
-                for (x = x1; x <= x2; x++)
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            int deltax, deltay, g, h, c;
+
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
                 {
-                    DrawPixel((int)(int)Math.Floor(x), (int)Math.Floor(y + 0.5f), color);
-                    y += m;
-                                       
+
+                    DrawPixel(x1, y1, color);
+
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
                 }
             }
             else
             {
-                dx = 1 / m;
-                for (y = y1; y <= y2; y++)
+                c = -deltay;
+                while (y1 != y2)
                 {
-                    DrawPixel((int)Math.Floor(x + 0.5f), (int)Math.Floor(y), color);
-                    x += dx;               
-                                       
+                    DrawPixel(x1, y1, color);
+
+
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
                 }
             }
+
         }
 
         public void DrawTriangle(Triangle t)
         {
-            DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, Color.FromRgb(255,255,255));
+            DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, Color.FromRgb(255, 255, 255));
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, Color.FromRgb(255, 255, 255));
             DrawLine((int)t.p[2].x, (int)t.p[2].y, (int)t.p[0].x, (int)t.p[0].y, Color.FromRgb(255, 255, 255));
         }
@@ -134,5 +157,26 @@ namespace Renderer3D.Engine
         {
             return viewport;
         }
+
+        
+
+
+        
+        public void ClearViewport()
+        {
+            
+            Int32Rect rect = new Int32Rect(0, 0, viewport.PixelWidth, viewport.PixelHeight);
+            int bytesPerPixel = viewport.Format.BitsPerPixel / 8; // typically 4 (BGR32)
+            byte[] empty = new byte[rect.Width * rect.Height * bytesPerPixel]; // cache this one
+            int emptyStride = rect.Width * bytesPerPixel;
+
+            viewport.WritePixels(rect, empty, emptyStride, 0);
+        }
+            
+
+        
+    
+
+        
     }
 }

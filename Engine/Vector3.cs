@@ -25,5 +25,61 @@ namespace Renderer3D.Engine
 
         public static Vector3 ones = new Vector3(1, 1, 1);
         public static Vector3 zeros = new Vector3(0, 0, 0);
+
+        public void Add(Vector3 v)
+        {
+            this.x += v.x;
+            this.y += v.y;
+            this.z += v.z;
+        }
+
+        public void Mul(float f)
+        {
+            this.x *= f;
+            this.y *= f;
+            this.z *= f;
+        }
+
+        public void Sub(Vector3 v)
+        {
+            this.x -= v.x;
+            this.y -= v.y;
+            this.z -= v.z;
+        }
+
+
+        public static Vector3 CrossProduct(Vector3 A, Vector3 B)
+        {
+            Vector3 ret = new Vector3();
+            ret.x = A.y * B.z - A.z * B.y;
+            ret.y = A.z * B.x - A.x * B.z;
+            ret.z = A.x * B.y - A.y * B.x;
+            return ret;
+        }
+
+        public static Vector3 DotProduct(Vector3 A, Vector3 B)
+        {
+            Vector3 ret = new Vector3();
+            ret.x = A.x * B.x;
+            ret.y = A.y * B.y;
+            ret.z = A.z * B.z;
+            return ret;
+        }
+
+
+        public static Vector3 VectorFromPoints(Vector3 A, Vector3 B)
+        {
+            Vector3 ret = new Vector3(B.x, B.y, B.z);
+            ret.Sub(A);
+            return ret;
+        }
+
+        public void Normalize()
+        {
+            float l = (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+            this.x /= l;
+            this.y /= l;
+            this.z /= l;
+        }
     }
 }
