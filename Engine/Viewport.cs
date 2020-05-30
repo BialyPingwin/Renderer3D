@@ -70,7 +70,7 @@ namespace Renderer3D.Engine
 
         public void DrawLine(int x1, int y1, int x2, int y2, Color color)
         {
-            int z_x = 0, z_y = 0;
+            
             if (x1 > x2)
             {
                 int tmp = x1;
@@ -81,18 +81,18 @@ namespace Renderer3D.Engine
                 y2 = tmp;
             }
 
-            if (x1 < 0)
-            {
-                z_x = Math.Abs(x1);
-                x2 += Math.Abs(x1);
-                x1 = 0;
-            }
-            if (y1 < 0)
-            {
-                z_y = Math.Abs(y1);
-                y2 += Math.Abs(y1);
-                y1 = 0;
-            }
+            //if (x1 < 0)
+            //{
+               
+            //    x2 += Math.Abs(x1);
+            //    x1 = 0;
+            //}
+            //if (y1 < 0)
+            //{
+                
+            //    y2 += Math.Abs(y1);
+            //    y1 = 0;
+            //}
 
 
             float dy, dx, x, y, m;

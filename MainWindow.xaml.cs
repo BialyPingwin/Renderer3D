@@ -58,7 +58,7 @@ namespace Renderer3D
             cube2.mesh = Mesh.CreateCube();
             myScene.AddObjectToScene(cube2);
 
-            SceneObject cube3 = new SceneObject(-3, 0, 2);
+            SceneObject cube3 = new SceneObject(-1, 0, 1);
             cube3.mesh = Mesh.CreateCube();
             myScene.AddObjectToScene(cube3);
 

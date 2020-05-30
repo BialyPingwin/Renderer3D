@@ -68,6 +68,8 @@
     <Compile Include="Engine\Mesh.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\SceneObject.cs" />
+    <Compile Include="Engine\Triangle.cs" />
+    <Compile Include="Engine\Vector3.cs" />
     <Compile Include="Engine\Viewport.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

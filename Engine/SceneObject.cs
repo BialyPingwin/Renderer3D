@@ -18,7 +18,7 @@ namespace Renderer3D.Engine
         {
             position = new Vector3(x, y, z);
             rotation = Vector3.ones;
-            scale = Vector3.ones;
+            scale = Vector3.zeros;
            
         }
 
