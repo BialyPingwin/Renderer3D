@@ -144,6 +144,55 @@ namespace Renderer3D.Engine
                 }
             }
 
+            //int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
+            //dx = x2 - x1; dy = y2 - y1;
+            //dx1 = Math.Abs(dx); dy1 = Math.Abs(dy);
+            //px = 2 * dy1 - dx1; py = 2 * dx1 - dy1;
+            //if (dy1 <= dx1)
+            //{
+            //    if (dx >= 0)
+            //    { x = x1; y = y1; xe = x2; }
+            //    else
+            //    { x = x2; y = y2; xe = x1; }
+
+            //    DrawPixel(x, y, color);
+
+            //    for (i = 0; x < xe; i++)
+            //    {
+            //        x = x + 1;
+            //        if (px < 0)
+            //            px = px + 2 * dy1;
+            //        else
+            //        {
+            //            if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) y = y + 1; else y = y - 1;
+            //            px = px + 2 * (dy1 - dx1);
+            //        }
+            //        DrawPixel(x, y, color);
+            //    }
+            //}
+            //else
+            //{
+            //    if (dy >= 0)
+            //    { x = x1; y = y1; ye = y2; }
+            //    else
+            //    { x = x2; y = y2; ye = y1; }
+
+            //    DrawPixel(x, y, color);
+
+            //    for (i = 0; y < ye; i++)
+            //    {
+            //        y = y + 1;
+            //        if (py <= 0)
+            //            py = py + 2 * dx1;
+            //        else
+            //        {
+            //            if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) x = x + 1; else x = x - 1;
+            //            py = py + 2 * (dx1 - dy1);
+            //        }
+            //        DrawPixel(x, y, color);
+            //    }
+            //}
+
         }
 
         public void DrawTriangle(Triangle t)
@@ -152,6 +201,98 @@ namespace Renderer3D.Engine
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, Color.FromRgb(255, 255, 255));
             DrawLine((int)t.p[2].x, (int)t.p[2].y, (int)t.p[0].x, (int)t.p[0].y, Color.FromRgb(255, 255, 255));
         }
+
+        public void FillTriangle(Triangle t)
+        {
+            int originY = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x);
+            int originX = (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
+            int dimX = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x) - (int)Vector3.Min(t.p[0].x, t.p[1].x, t.p[2].x);
+            int dimY = (int)Vector3.Max(t.p[0].y, t.p[1].y, t.p[2].y) - (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
+
+            int[,] toFill = new int[dimX, dimY];
+            
+
+            for (int i = 0; i < 3; i++)
+            {
+                
+                int j = i + 1;
+                if (j > 2)
+                {
+                    j = 0;
+                }
+
+                int x1 = (int)t.p[i].x;
+                int y1 = (int)t.p[i].y;
+                int x2 = (int)t.p[j].x;
+                int y2 = (int)t.p[j].y;
+
+                if (x2 <= x1)
+                {
+                    int tmp = x1;
+                    x1 = x2;
+                    x2 = tmp;
+                    tmp = y1;
+                    y1 = y2;
+                    y2 = tmp;
+                }
+                if (y2 < y1)
+                {
+                    int tmp = x1;
+                    x1 = x2;
+                    x2 = tmp;
+                    tmp = y1;
+                    y1 = y2;
+                    y2 = tmp;
+                }
+
+                if (y2 - y1 > x2 - x1)
+                {
+                    int tmp = x1;
+                    x1 = x2;
+                    x2 = tmp;
+                    tmp = y1;
+                    y1 = y2;
+                    y2 = tmp;
+                }
+
+                int deltax, deltay, g, h, c;
+
+                deltax = x2 - x1;
+                if (deltax > 0) g = +1; else g = -1;
+                deltax = Math.Abs(deltax);
+                deltay = y2 - y1;
+                if (deltay > 0) h = +1; else h = -1;
+                deltay = Math.Abs(deltay);
+                if (deltax > deltay)
+                {
+                    c = -deltax;
+                    while (x1 != x2)
+                    {
+                        //toFill[-originX + x1, originY -y1-1] = 1;
+                        DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+
+                        c += 2 * deltay;
+                        if (c > 0) { y1 += h; c -= 2 * deltax; }
+                        x1 += g;
+                    }
+                }
+                else
+                {
+                    c = -deltay;
+                    while (y1 != y2)
+                    {
+                        //toFill[-originX +x1, originY - y1-1] = 1;
+                        DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+
+
+                        c += 2 * deltax;
+                        if (c > 0) { x1 += g; c -= 2 * deltay; }
+                        y1 += h;
+                    }
+                }
+            }
+        }
+
 
         public WriteableBitmap ShowViewport()
         {

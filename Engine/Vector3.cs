@@ -47,6 +47,13 @@ namespace Renderer3D.Engine
             this.z -= v.z;
         }
 
+        public static Vector3 Sub(Vector3 A, Vector3 B)
+        {
+            Vector3 ret = new Vector3(A.x, A.y, A.z);
+            ret.Sub(B);
+            return ret;
+        }
+
 
         public static Vector3 CrossProduct(Vector3 A, Vector3 B)
         {
@@ -57,20 +64,20 @@ namespace Renderer3D.Engine
             return ret;
         }
 
-        public static Vector3 DotProduct(Vector3 A, Vector3 B)
+        public static float DotProduct(Vector3 A, Vector3 B)
         {
             Vector3 ret = new Vector3();
             ret.x = A.x * B.x;
             ret.y = A.y * B.y;
             ret.z = A.z * B.z;
-            return ret;
+            return ret.x + ret.y + ret.z;
         }
 
 
         public static Vector3 VectorFromPoints(Vector3 A, Vector3 B)
         {
-            Vector3 ret = new Vector3(B.x, B.y, B.z);
-            ret.Sub(A);
+            Vector3 ret = new Vector3(A.x, A.y, A.z);
+            ret.Sub(B);
             return ret;
         }
 
@@ -80,6 +87,45 @@ namespace Renderer3D.Engine
             this.x /= l;
             this.y /= l;
             this.z /= l;
+        }
+
+        public static float Max(float x, float y, float z)
+        {
+            if (x >= y && x >= z)
+            {
+                return x;
+            }
+            else if (y >=x && y>= z){
+                return y;
+            }
+            else if (z >= x && z >= y)
+            {
+                return z;
+            }
+            else
+            {
+                return x;
+            }
+        }
+
+        public static float Min(float x, float y, float z)
+        {
+            if (x <= y && x <= z)
+            {
+                return x;
+            }
+            else if (y <= x && y <= z)
+            {
+                return y;
+            }
+            else if (z <= x && z <= y)
+            {
+                return z;
+            }
+            else
+            {
+                return x;
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Renderer3D.Engine
                 t.p[1].y += -0.5f;
                 t.p[2].y += -0.5f;
 
-
+                ///System.Windows.MessageBox.Show(t.p[0].x +" " + t.p[0].y+" " +t.p[0].z) ;
 
                 t.p[0] = Project(t.p[0]);
                 t.p[1] = Project(t.p[1]);
@@ -83,7 +83,7 @@ namespace Renderer3D.Engine
                 t.p[2].x *= 0.5f * viewport.width;
                 t.p[2].y *= 0.5f * viewport.height;
 
-                viewport.DrawTriangle(t);
+                viewport.FillTriangle(t);
             }
 
             

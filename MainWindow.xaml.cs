@@ -60,7 +60,6 @@ namespace Renderer3D
             myScene.AddObjectToScene(cube3);
 
             camera = new Camera(testViewport, myScene);
-            
 
             
         }
