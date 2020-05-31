@@ -41,6 +41,11 @@ namespace Renderer3D.Engine
             {
                 return;
             }
+            if(CheckPixel(column, row, color))
+            {
+                
+                return;
+            }
 
             try
             {
@@ -62,6 +67,10 @@ namespace Renderer3D.Engine
                     color_data |= color.B << 0;   // B
 
                     // Assign the color data to the pixel.
+                    //if(*((int*)pBackBuffer) == color_data)
+                    //{
+                    //    return;
+                    //}
                     *((int*)pBackBuffer) = color_data;
                 }
 
@@ -204,93 +213,127 @@ namespace Renderer3D.Engine
 
         public void FillTriangle(Triangle t)
         {
-            int originY = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x);
-            int originX = (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
-            int dimX = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x) - (int)Vector3.Min(t.p[0].x, t.p[1].x, t.p[2].x);
-            int dimY = (int)Vector3.Max(t.p[0].y, t.p[1].y, t.p[2].y) - (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
+            //int originY = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x);
+            //int originX = (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
+            //int dimX = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x) - (int)Vector3.Min(t.p[0].x, t.p[1].x, t.p[2].x);
+            //int dimY = (int)Vector3.Max(t.p[0].y, t.p[1].y, t.p[2].y) - (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
 
-            int[,] toFill = new int[dimX, dimY];
-            
+            //int[,] toFill = new int[dimX+1, dimY+1];
+            DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, Color.FromRgb(255, 255, 255));
+            DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, Color.FromRgb(255, 255, 255));
 
-            for (int i = 0; i < 3; i++)
+
+            List<Vector3> toFillPoints = new List<Vector3>();
+            Vector3 fillOrigin = new Vector3(t.p[1].x, t.p[1].y, 0);
+
+            //for (int i = 0; i < 3; i++)
+            //{
+
+            //    int j = i + 1;
+            //    if (j > 2)
+            //    {
+            //        j = 0;
+            //    }
+
+            //int x1 = (int)t.p[i].x;
+            //int y1 = (int)t.p[i].y;
+            //int x2 = (int)t.p[j].x;
+            //int y2 = (int)t.p[j].y;
+
+            int x1 = (int)t.p[2].x;
+            int y1 = (int)t.p[2].y;
+            int x2 = (int)t.p[0].x;
+            int y2 = (int)t.p[0].y;
+            int lineNumber = 0;
+            int lineToDrop = 5;
+
+            if (x2 <= x1)
             {
-                
-                int j = i + 1;
-                if (j > 2)
-                {
-                    j = 0;
-                }
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            if (y2 < y1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
 
-                int x1 = (int)t.p[i].x;
-                int y1 = (int)t.p[i].y;
-                int x2 = (int)t.p[j].x;
-                int y2 = (int)t.p[j].y;
+            if (y2 - y1 > x2 - x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
 
-                if (x2 <= x1)
-                {
-                    int tmp = x1;
-                    x1 = x2;
-                    x2 = tmp;
-                    tmp = y1;
-                    y1 = y2;
-                    y2 = tmp;
-                }
-                if (y2 < y1)
-                {
-                    int tmp = x1;
-                    x1 = x2;
-                    x2 = tmp;
-                    tmp = y1;
-                    y1 = y2;
-                    y2 = tmp;
-                }
+            int deltax, deltay, g, h, c;
 
-                if (y2 - y1 > x2 - x1)
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
                 {
-                    int tmp = x1;
-                    x1 = x2;
-                    x2 = tmp;
-                    tmp = y1;
-                    y1 = y2;
-                    y2 = tmp;
-                }
-
-                int deltax, deltay, g, h, c;
-
-                deltax = x2 - x1;
-                if (deltax > 0) g = +1; else g = -1;
-                deltax = Math.Abs(deltax);
-                deltay = y2 - y1;
-                if (deltay > 0) h = +1; else h = -1;
-                deltay = Math.Abs(deltay);
-                if (deltax > deltay)
-                {
-                    c = -deltax;
-                    while (x1 != x2)
+                    //toFill[-originX + x1, originY -y1] = 1;
+                    //toFillPoints.Add(new Vector3(x1, y1,0));
+                    DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+                    if (lineNumber % lineToDrop == 0)
                     {
-                        //toFill[-originX + x1, originY -y1-1] = 1;
-                        DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
-
-                        c += 2 * deltay;
-                        if (c > 0) { y1 += h; c -= 2 * deltax; }
-                        x1 += g;
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),8);
                     }
-                }
-                else
-                {
-                    c = -deltay;
-                    while (y1 != y2)
-                    {
-                        //toFill[-originX +x1, originY - y1-1] = 1;
-                        DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+                    lineNumber++;
 
-
-                        c += 2 * deltax;
-                        if (c > 0) { x1 += g; c -= 2 * deltay; }
-                        y1 += h;
-                    }
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
                 }
             }
+            else
+            {
+                c = -deltay;
+                while (y1 != y2)
+                {
+                    //toFill[-originX +x1, originY - y1] = 1;
+
+                    //toFillPoints.Add(new Vector3(x1, y1, 0));
+                    DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+                    if (lineNumber % lineToDrop == 0)
+                    {
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),8);
+                    }
+                    lineNumber++;
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
+                }
+            }
+
+            //}
+
+            //int i = 0;
+            //foreach(Vector3 v in toFillPoints)
+            //{
+            //    if (i % 2 == 0)
+            //    {
+            //        DrawLine((int)fillOrigin.x, (int)fillOrigin.y, (int)v.x, (int)v.y, Color.FromRgb(255, 255, 255));
+            //    }
+            //    i++;
+            //}
         }
 
 
@@ -299,10 +342,95 @@ namespace Renderer3D.Engine
             return viewport;
         }
 
-        
+        private bool CheckPixel(int x, int y, Color color)
+        {
+            int stride = (viewport.Format.BitsPerPixel / 8);
+            Int32Rect pixelCheck = new Int32Rect(x, y, 1, 1);
+            byte[] data = new byte[stride];
+            viewport.CopyPixels(pixelCheck, data, stride, 0);
+            if (data[0] == color.B && data[1] == color.G && data[2] == color.R)
+            {
+                return true;
+            }
+            else return false;
+            
+        }
+
+        public void DrawBoldLine(int x1, int y1, int x2, int y2, Color color, int bold)
+        {
+            if (x2 <= x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            if (y2 < y1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            if (y2 - y1 > x2 - x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            int deltax, deltay, g, h, c;
+
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
+                {
+                    for (int i = -(int)bold / 2; i < (int)bold / 2; i++)
+                    {
+                        DrawPixel(x1, y1+i, color);
+                    }
+                    
+
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
+                }
+            }
+            else
+            {
+                c = -deltay;
+                while (y1 != y2)
+                {
+                    for (int i =  -(int)bold/2 ; i < (int)bold /2; i++)
+                    {
+                        DrawPixel(x1 + i, y1, color);
+                    }
 
 
-        
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
+                }
+            }
+        }
+
+
+
         public void ClearViewport()
         {
             
