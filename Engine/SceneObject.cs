@@ -14,6 +14,7 @@ namespace Renderer3D.Engine
 
 
         public Mesh mesh;
+        public Material material;
         public SceneObject(float x, float y, float z)
         {
             position = new Vector3(x, y, z);

@@ -238,8 +238,17 @@ namespace Renderer3D.Engine
             //int dimY = (int)Vector3.Max(t.p[0].y, t.p[1].y, t.p[2].y) - (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
 
             //int[,] toFill = new int[dimX+1, dimY+1];
-            DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, Color.FromRgb(255, 255, 255));
-            DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, Color.FromRgb(255, 255, 255));
+            Color TriangleColor = Color.FromRgb(255,255,255);
+            if (viewportMode == Mode.shaded)
+            {
+                TriangleColor = t.GetColor(true);
+            }
+            else if (viewportMode == Mode.solid)
+            {
+                TriangleColor = t.GetColor(false);
+            }
+            DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor);
+            DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor);
 
 
             List<Vector3> toFillPoints = new List<Vector3>();
@@ -310,10 +319,10 @@ namespace Renderer3D.Engine
                 {
                     //toFill[-originX + x1, originY -y1] = 1;
                     //toFillPoints.Add(new Vector3(x1, y1,0));
-                    DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+                    DrawPixel(x1, y1, TriangleColor);
                     if (lineNumber % lineToDrop == 0)
                     {
-                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),4);
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4);
                     }
                     lineNumber++;
 
@@ -330,10 +339,10 @@ namespace Renderer3D.Engine
                     //toFill[-originX +x1, originY - y1] = 1;
 
                     //toFillPoints.Add(new Vector3(x1, y1, 0));
-                    DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
+                    DrawPixel(x1, y1, TriangleColor);
                     if (lineNumber % lineToDrop == 0)
                     {
-                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),4);
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4);
                     }
                     lineNumber++;
                     c += 2 * deltax;
@@ -470,6 +479,10 @@ namespace Renderer3D.Engine
             else if( i== 2)
             {
                 viewportMode = Mode.solid;
+            }
+            else if (i == 3)
+            {
+                viewportMode = Mode.shaded;
             }
         }
         

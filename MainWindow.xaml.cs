@@ -49,6 +49,7 @@ namespace Renderer3D
 
             SceneObject cube = new SceneObject(0, 0, 1);
             cube.mesh = Mesh.CreateCube();
+            cube.material = new Material(255, 0, 0);
             myScene.AddObjectToScene(cube);
 
             SceneObject cube2 = new SceneObject(6, 0, 3);
@@ -58,6 +59,9 @@ namespace Renderer3D
             SceneObject cube3 = new SceneObject(-1.05f, 0, 1);
             cube3.mesh = Mesh.CreateCube();
             myScene.AddObjectToScene(cube3);
+
+            Light light1 = new Light(0, 0, 0, new Vector3(0, 0, -1));
+            myScene.AddObjectToScene(light1);
 
             camera = new Camera(testViewport, myScene);
 
@@ -99,7 +103,11 @@ namespace Renderer3D
             {
                 testViewport.RenderMode(2);
             }
-            if(e.Key == Key.A)
+            if (e.Key == Key.D3)
+            {
+                testViewport.RenderMode(3);
+            }
+            if (e.Key == Key.A)
             {
                 controls.SetRotation(1.0f);
             }
