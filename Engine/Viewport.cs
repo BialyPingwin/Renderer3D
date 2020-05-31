@@ -15,12 +15,19 @@ namespace Renderer3D.Engine
         public float width;
         public float height;
 
+        enum Mode
+        {
+            wireframe, solid, shaded
+        }
+
+        Mode viewportMode;
         public Viewport(int width, int height)
         {
             viewport = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
 
             this.width = width;
             this.height = height;
+            viewportMode = Mode.solid;
         }
 
         public void DrawPixel(int column, int row, Color color)
@@ -206,6 +213,18 @@ namespace Renderer3D.Engine
 
         public void DrawTriangle(Triangle t)
         {
+            if(viewportMode == Mode.wireframe)
+            {
+                DrawTriangleWireframe(t);
+            }
+            else if( viewportMode == Mode.solid)
+            {
+                FillTriangle(t);
+            }
+        }
+
+        public void DrawTriangleWireframe(Triangle t)
+        {
             DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, Color.FromRgb(255, 255, 255));
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, Color.FromRgb(255, 255, 255));
             DrawLine((int)t.p[2].x, (int)t.p[2].y, (int)t.p[0].x, (int)t.p[0].y, Color.FromRgb(255, 255, 255));
@@ -245,7 +264,7 @@ namespace Renderer3D.Engine
             int x2 = (int)t.p[0].x;
             int y2 = (int)t.p[0].y;
             int lineNumber = 0;
-            int lineToDrop = 5;
+            int lineToDrop = 2;
 
             if (x2 <= x1)
             {
@@ -294,7 +313,7 @@ namespace Renderer3D.Engine
                     DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
                     if (lineNumber % lineToDrop == 0)
                     {
-                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),8);
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),4);
                     }
                     lineNumber++;
 
@@ -314,7 +333,7 @@ namespace Renderer3D.Engine
                     DrawPixel(x1, y1, Color.FromRgb(255, 255, 255));
                     if (lineNumber % lineToDrop == 0)
                     {
-                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),8);
+                        DrawBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, Color.FromRgb(255, 255, 255),4);
                     }
                     lineNumber++;
                     c += 2 * deltax;
@@ -442,7 +461,17 @@ namespace Renderer3D.Engine
             viewport.WritePixels(rect, empty, emptyStride, 0);
         }
             
-
+        public void RenderMode(int i)
+        {
+            if (i == 1)
+            {
+                viewportMode = Mode.wireframe;
+            }
+            else if( i== 2)
+            {
+                viewportMode = Mode.solid;
+            }
+        }
         
     
 

@@ -91,6 +91,14 @@ namespace Renderer3D
             {
                 controls.SetHorizontal(1f);
             }
+            if(e.Key == Key.D1)
+            {
+                testViewport.RenderMode(1);
+            }
+            if (e.Key == Key.D2)
+            {
+                testViewport.RenderMode(2);
+            }
         }
 
         private void InputKeyUp(object sender, KeyEventArgs e)

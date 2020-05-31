@@ -83,7 +83,7 @@ namespace Renderer3D.Engine
                 t.p[2].x *= 0.5f * viewport.width;
                 t.p[2].y *= 0.5f * viewport.height;
 
-                viewport.FillTriangle(t);
+                viewport.DrawTriangle(t);
             }
 
             
