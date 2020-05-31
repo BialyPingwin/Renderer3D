@@ -127,5 +127,16 @@ namespace Renderer3D.Engine
                 return x;
             }
         }
+
+        public void RotateY(float fi)
+        {
+            Vector3 ret = new Vector3();
+            ret.x = (float)(this.x * Math.Cos(fi) + this.z * Math.Sin(fi));
+            ret.y = this.y;
+            ret.z = (float)(this.x * -Math.Sin(fi) + this.z * Math.Cos(fi));
+            this.x = ret.x;
+            this.y = ret.y;
+            this.z = ret.z;
+        }
     }
 }

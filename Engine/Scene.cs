@@ -11,6 +11,7 @@ namespace Renderer3D.Engine
     {
         List<SceneObject> objects;
         Vector3 moveSceneVector;
+        float sceneRotation = 0f;
         public Scene()
         {
             objects = new List<SceneObject>();
@@ -32,7 +33,7 @@ namespace Renderer3D.Engine
                     foreach (Triangle t in so.mesh.Tris)
                     {
                         
-                        Triangle newT = Triangle.TranslatedTriangle(Triangle.TranslatedTriangle(t, so.position), moveSceneVector);
+                        Triangle newT = Triangle.RotateTriangle(Triangle.TranslatedTriangle(Triangle.TranslatedTriangle(t, so.position), moveSceneVector),sceneRotation);
 
                         if (newT.p[0].z > 0.5f && newT.p[1].z > 0.5f && newT.p[2].z > 0.5f)
                         {
@@ -54,7 +55,14 @@ namespace Renderer3D.Engine
 
         public void MoveScene(Vector3 move)
         {
-            moveSceneVector.Add(move);
+            Vector3 m = move;
+            m.RotateY(-sceneRotation);
+            moveSceneVector.Add(m);
+        }
+
+        public void RotateScene(float fi)
+        {
+            sceneRotation += fi;
         }
 
     }

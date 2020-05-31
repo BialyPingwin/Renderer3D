@@ -10,13 +10,19 @@ namespace Renderer3D.Engine
     {
         public float Horizontal = 0f;
         public float Vertical = 0f;
-        public float Speed = 0.1f;
+        public float Rotation = 0f;
+        public float MoveSpeed = 0.1f;
+        public float RotationSpeed = 0.1f;
 
         public Vector3 GetControls()
         {
-            return new Vector3(Horizontal * Speed, 0, Vertical * Speed);
+            return new Vector3(Horizontal * MoveSpeed, 0, Vertical * MoveSpeed);
         }
 
+        public float GetRotation()
+        {
+            return Rotation * RotationSpeed;
+        }
         public void SetVertical(float input)
         {
             Vertical = input;
@@ -33,6 +39,10 @@ namespace Renderer3D.Engine
             Vertical = 0f;
         }
 
+        public void SetRotation(float r)
+        {
+            Rotation = r;
+        }
 
     }
 }

@@ -69,7 +69,7 @@ namespace Renderer3D
             
             camera.Render();
             myScene.MoveScene(controls.GetControls());
-
+            myScene.RotateScene(controls.GetRotation());
         }
 
         private void InputKeyDown(object sender, KeyEventArgs e)
@@ -99,6 +99,15 @@ namespace Renderer3D
             {
                 testViewport.RenderMode(2);
             }
+            if(e.Key == Key.A)
+            {
+                controls.SetRotation(1.0f);
+            }
+            if (e.Key == Key.D)
+            {
+                controls.SetRotation(-1.0f);
+            }
+
         }
 
         private void InputKeyUp(object sender, KeyEventArgs e)
@@ -112,7 +121,13 @@ namespace Renderer3D
             {
                 controls.SetHorizontal(0f);
             }
+
+            if (e.Key == Key.A || e.Key == Key.D)
+            {
+                controls.SetRotation(0f);
+            }
             
+
         }
     }
 }

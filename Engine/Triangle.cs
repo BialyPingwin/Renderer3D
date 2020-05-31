@@ -36,6 +36,16 @@ namespace Renderer3D.Engine
             return n;
         }
 
+        public static Triangle RotateTriangle(Triangle t, float angle)
+        {
+            Triangle n = new Triangle(t.p[0].x, t.p[0].y, t.p[0].z, t.p[1].x, t.p[1].y, t.p[1].z, t.p[2].x, t.p[2].y, t.p[2].z);
+            n.p[0].RotateY(angle);
+            n.p[1].RotateY(angle);
+            n.p[2].RotateY(angle);
+
+            return n;
+        }
+
 
     }
 }
