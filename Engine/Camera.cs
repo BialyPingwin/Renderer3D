@@ -47,12 +47,13 @@ namespace Renderer3D.Engine
             return vout;
         }
 
-        public void Render() 
+        public void Render()
         {
             List<Triangle> trisToRender = scene.CollectTris();
+            
 
             viewport.ClearViewport();
-            foreach(Triangle t in trisToRender)
+            foreach (Triangle t in trisToRender)
             {
                 //t.p[0].z += 3f;
                 //t.p[1].z += 3f;
@@ -83,11 +84,17 @@ namespace Renderer3D.Engine
                 t.p[2].x *= 0.5f * viewport.width;
                 t.p[2].y *= 0.5f * viewport.height;
 
+                
+            }
+            trisToRender.Sort(new TriangleComparerByZ());
+
+            foreach (Triangle t in trisToRender)
+            {
                 viewport.DrawTriangle(t);
             }
 
-            
         }
+        
         
     }
 }

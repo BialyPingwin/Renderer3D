@@ -20,13 +20,16 @@ namespace Renderer3D.Engine
         public float GetLightFactor(Vector3 normal)
         {
             float factor = Vector3.DotProduct(this.lightDirection, normal);
+
+            factor += 0.5f;
+            if (factor > 1f) factor = 1f;
             if (factor > 0)
             {
-                return 0;
+                return factor;
             }
             else
             {
-                return -factor;
+                return 0 ;
             }
         }
 

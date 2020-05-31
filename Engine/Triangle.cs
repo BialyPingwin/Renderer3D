@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Renderer3D.Engine
@@ -35,6 +36,7 @@ namespace Renderer3D.Engine
         {
             Triangle n = new Triangle(t.p[0].x, t.p[0].y, t.p[0].z, t.p[1].x, t.p[1].y, t.p[1].z, t.p[2].x, t.p[2].y, t.p[2].z);
             n.color = t.color;
+            n.lightFactor = t.lightFactor;
             n.Translate(translate);
 
             return n;
@@ -44,6 +46,7 @@ namespace Renderer3D.Engine
         {
             Triangle n = new Triangle(t.p[0].x, t.p[0].y, t.p[0].z, t.p[1].x, t.p[1].y, t.p[1].z, t.p[2].x, t.p[2].y, t.p[2].z);
             n.color = t.color;
+            n.lightFactor = t.lightFactor;
             n.p[0].RotateY(angle);
             n.p[1].RotateY(angle);
             n.p[2].RotateY(angle);
@@ -56,10 +59,12 @@ namespace Renderer3D.Engine
 
             if (lit)
             {
+                
                 return Light.LuminateColor(color, lightFactor);
             }
             else
             {
+                
                 return color;
             }
 
@@ -72,5 +77,16 @@ namespace Renderer3D.Engine
             return normal;
         }
 
+    }
+
+    class TriangleComparerByZ : Comparer<Triangle>
+    {
+        public override int Compare(Triangle x, Triangle y)
+        {
+            float midZx = (x.p[0].z+ x.p[1].z +x.p[2].z) / 3.0f;
+            float midZy = (y.p[0].z + y.p[1].z + y.p[2].z) / 3.0f;
+
+            return midZy.CompareTo(midZx);
+        }
     }
 }

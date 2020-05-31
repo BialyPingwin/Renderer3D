@@ -27,7 +27,7 @@ namespace Renderer3D.Engine
 
             this.width = width;
             this.height = height;
-            viewportMode = Mode.solid;
+            viewportMode = Mode.shaded;
         }
 
         public void DrawPixel(int column, int row, Color color)
@@ -217,7 +217,7 @@ namespace Renderer3D.Engine
             {
                 DrawTriangleWireframe(t);
             }
-            else if( viewportMode == Mode.solid)
+            else if( viewportMode == Mode.solid || viewportMode == Mode.shaded)
             {
                 FillTriangle(t);
             }
@@ -251,7 +251,7 @@ namespace Renderer3D.Engine
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor);
 
 
-            List<Vector3> toFillPoints = new List<Vector3>();
+            //List<Vector3> toFillPoints = new List<Vector3>();
             Vector3 fillOrigin = new Vector3(t.p[1].x, t.p[1].y, 0);
 
             //for (int i = 0; i < 3; i++)
