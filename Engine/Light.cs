@@ -38,5 +38,54 @@ namespace Renderer3D.Engine
             Color c = Color.FromRgb((byte)(color.R * lightFactor), (byte)(color.G * lightFactor), (byte)(color.B * lightFactor));
             return c;
         }
+
+        public static float LightFactorInterpolation(float a, float b, float c)
+        {
+            if (c > 1f)
+            {
+                c = 1f;
+            }
+
+            if (c < 0)
+            {
+                c = 0f;
+            }
+
+            //if (a > b)
+            //{
+            //    float temp = b;
+            //    b = a;
+            //    a = temp;
+            //}
+
+            float dif = b - a;
+
+            return a + dif * c;
+
+        }
+
+        public static Color ColorInterpolation(Color a, Color b, float c)
+        {
+
+            if (c > 1f)
+            {
+                c = 1f;
+            }
+
+            if (c < 0)
+            {
+                c = 0f;
+            }
+
+            Vector3 aRgb = new Vector3(a.R, a.G, a.B);
+            Vector3 bRgb = new Vector3(b.R, b.G, b.B);
+            Vector3 dif = Vector3.Sub(aRgb, bRgb);
+
+            dif.Mul(c);
+
+            return Color.FromRgb((byte)dif.x, (byte)dif.y, (byte)dif.z);
+
+        }
+        
     }
 }
