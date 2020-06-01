@@ -52,13 +52,16 @@ namespace Renderer3D
             cube.material = new Material(194, 178, 128);
             myScene.AddObjectToScene(cube);
 
-            //SceneObject cube2 = new SceneObject(6, 0, 3);
-            //cube2.mesh = Mesh.CreateCube();
-            //myScene.AddObjectToScene(cube2);
+            SceneObject cube2 = new SceneObject(6, 0, 3);
+            cube2.mesh = Mesh.CreateCube();
+            cube2.rotation.y = -45f;
+            cube2.rotation.z = -30f;
+            cube2.scale.y = 3f;
+            myScene.AddObjectToScene(cube2);
 
-            //SceneObject cube3 = new SceneObject(-1.05f, 0, 1);
-            //cube3.mesh = Mesh.CreateCube();
-            //myScene.AddObjectToScene(cube3);
+            SceneObject cube3 = new SceneObject(-1.05f, 0, 1);
+            cube3.mesh = Mesh.CreateCube();
+            myScene.AddObjectToScene(cube3);
 
             SceneObject sphere1 = new SceneObject(0, 0, -10);
             sphere1.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
@@ -124,6 +127,14 @@ namespace Renderer3D
             {
                 controls.SetRotation(-1.0f);
             }
+            if (e.Key == Key.Space)
+            {
+                controls.SetHight(1.0f);
+            }
+            if (e.Key == Key.LeftCtrl)
+            {
+                controls.SetHight(-1.0f);
+            }
 
         }
 
@@ -142,6 +153,10 @@ namespace Renderer3D
             if (e.Key == Key.A || e.Key == Key.D)
             {
                 controls.SetRotation(0f);
+            }
+            if (e.Key == Key.Space || e.Key == Key.LeftCtrl)
+            {
+                controls.SetHight(0f);
             }
             
 

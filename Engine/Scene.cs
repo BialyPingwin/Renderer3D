@@ -12,12 +12,15 @@ namespace Renderer3D.Engine
         List<SceneObject> objects;
         List<Light> lights;
         Vector3 moveSceneVector;
-        float sceneRotation = 0f;
+
+        Vector3 sceneRotation;
+        
         public Scene()
         {
             objects = new List<SceneObject>();
             lights = new List<Light>();
-            moveSceneVector = Vector3.zeros;
+            moveSceneVector = Vector3.Zeros();
+            sceneRotation = Vector3.Zeros();            
         }
 
         public void AddObjectToScene(SceneObject sceneObject)
@@ -52,9 +55,11 @@ namespace Renderer3D.Engine
                         {
                             t.color = so.material.GetColor();
                         }
+                        Triangle inScene = Triangle.Copy(t);
+                        inScene.ScaleTriangle(so.scale);
+                        inScene.RotateTriangle(so.rotation);
                         
-
-                        Triangle inScene = Triangle.TranslatedTriangle(t, so.position);
+                        inScene = Triangle.TranslatedTriangle(inScene, so.position);
                         foreach (Light l in translatedLights)
                         {
                             inScene.lightFactor = l.GetLightFactor(inScene.GetNormal());
@@ -65,13 +70,13 @@ namespace Renderer3D.Engine
                             }
                         }
 
-                        Triangle newT = Triangle.RotateTriangle(Triangle.TranslatedTriangle(inScene, moveSceneVector),sceneRotation);
+                        Triangle newT = Triangle.RotateTriangle(Triangle.TranslatedTriangle(inScene, moveSceneVector),sceneRotation.y);
 
                         if (newT.p[0].z > 0.5f && newT.p[1].z > 0.5f && newT.p[2].z > 0.5f)
                         {
                             Vector3 normal = newT.GetNormal();
                             Vector3 newP = Vector3.Sub(newT.p[0], new Vector3(0.4f, 0f, 0.4f));
-                            if (Vector3.DotProduct(normal, newP) < 0)
+                            if (Vector3.DotProduct(normal, newP) <= 0)
                             {
                                 tris.Add(newT);
                             }
@@ -87,13 +92,15 @@ namespace Renderer3D.Engine
         public void MoveScene(Vector3 move)
         {
             Vector3 m = move;
-            m.RotateY(-sceneRotation);
+            m.RotateY(-1f * sceneRotation.y);
             moveSceneVector.Add(m);
         }
 
         public void RotateScene(float fi)
         {
-            sceneRotation += fi;
+            sceneRotation.y += fi;
+            
+
         }
 
     }

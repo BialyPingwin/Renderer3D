@@ -118,6 +118,29 @@ namespace Renderer3D.Engine
             return normal;
         }
 
+        public void RotateTriangle(Vector3 angle)
+        {
+            this.p[0].Rotate(angle);
+            this.p[1].Rotate(angle);
+            this.p[2].Rotate(angle);
+        }
+
+        public void ScaleTriangle(Vector3 scale)
+        {
+            this.p[0].Scale(scale);
+            this.p[1].Scale(scale);
+            this.p[2].Scale(scale);
+        }
+
+        public static Triangle Copy(Triangle t)
+        {
+            Triangle n = new Triangle(t.p[0].x, t.p[0].y, t.p[0].z, t.p[1].x, t.p[1].y, t.p[1].z, t.p[2].x, t.p[2].y, t.p[2].z);
+            n.color = t.color;
+            n.lightFactor = t.lightFactor;
+            n.lightFactorPerPoint = t.lightFactorPerPoint;
+            return n;
+        }
+
     }
 
     class TriangleComparerByZ : Comparer<Triangle>

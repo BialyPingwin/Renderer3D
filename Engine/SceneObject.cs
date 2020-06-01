@@ -18,8 +18,8 @@ namespace Renderer3D.Engine
         public SceneObject(float x, float y, float z)
         {
             position = new Vector3(x, y, z);
-            rotation = Vector3.ones;
-            scale = Vector3.zeros;
+            rotation = Vector3.Zeros(); 
+            scale = Vector3.Ones();
            
         }
 

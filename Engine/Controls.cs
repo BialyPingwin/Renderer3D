@@ -10,13 +10,14 @@ namespace Renderer3D.Engine
     {
         public float Horizontal = 0f;
         public float Vertical = 0f;
+        public float Hight = 0f;
         public float Rotation = 0f;
         public float MoveSpeed = 0.1f;
         public float RotationSpeed = 2f;
 
         public Vector3 GetControls()
         {
-            return new Vector3(Horizontal * MoveSpeed, 0, Vertical * MoveSpeed);
+            return new Vector3(Horizontal * MoveSpeed, Hight * MoveSpeed, Vertical * MoveSpeed);
         }
 
         public float GetRotation()
@@ -31,6 +32,11 @@ namespace Renderer3D.Engine
         public void SetHorizontal(float input)
         {
             Horizontal = input;
+        }
+
+        public void SetHight(float input)
+        {
+            Hight = input;
         }
 
         public void ResetControls()
