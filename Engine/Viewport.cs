@@ -239,13 +239,16 @@ namespace Renderer3D.Engine
 
             //int[,] toFill = new int[dimX+1, dimY+1];
             Color TriangleColor = Color.FromRgb(255,255,255);
+            int lineToDrop = 1;
             if (viewportMode == Mode.shaded)
             {
                 TriangleColor = t.GetColor(true);
+                
             }
             else if (viewportMode == Mode.solid)
             {
                 TriangleColor = t.GetColor(false);
+                
             }
             DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor);
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor);
@@ -273,7 +276,7 @@ namespace Renderer3D.Engine
             int x2 = (int)t.p[0].x;
             int y2 = (int)t.p[0].y;
             int lineNumber = 0;
-            int lineToDrop = 2;
+            
 
             if (x2 <= x1)
             {

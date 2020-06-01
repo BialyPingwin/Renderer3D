@@ -22,6 +22,15 @@ namespace Renderer3D.Engine
             color = Color.FromRgb(255, 255, 255);
         }
 
+        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2)
+        {
+            p = new Vector3[3];
+            p[0] = v0;
+            p[1] = v1;
+            p[2] = v2;
+            color = Color.FromRgb(255, 255, 255);
+        }
+
         public void Translate(Vector3 translate)
         {
             foreach (Vector3 v in p)

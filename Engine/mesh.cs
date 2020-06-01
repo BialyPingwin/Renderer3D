@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Windows;
+using System.Globalization;
 
 namespace Renderer3D.Engine
 {
@@ -42,6 +45,47 @@ namespace Renderer3D.Engine
             return cube;
         }
 
+        public static Mesh LoadFromObj(string file)
+        {
+
+            List<Vector3> points = new List<Vector3>();
+            List<Triangle> triangles = new List<Triangle>();
+            try
+            {
+                
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        if (line[0] == 'v')
+                        {
+
+                            string[] dim = line.Split(' ');                                                       
+                            points.Add(new Vector3((float.Parse(dim[1], CultureInfo.InvariantCulture.NumberFormat)), (float.Parse(dim[2], CultureInfo.InvariantCulture.NumberFormat)), (float.Parse(dim[3], CultureInfo.InvariantCulture.NumberFormat))));
+                        }
+                        if (line[0] == 'f')
+                        {
+                            string[] pointNumber = line.Split(' ');
+                            triangles.Add(new Triangle(points[Convert.ToInt32(pointNumber[1]) -1], points[Convert.ToInt32(pointNumber[2]) - 1], points[Convert.ToInt32(pointNumber[3]) - 1]));
+                        }
+                        
+
+                    }
+                }
+
+                Mesh mesh = new Mesh();
+                mesh.Tris = triangles.ToArray();
+                return mesh;
+                
+                
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Error with obj " + e.Message);
+                return null;
+            }
+        }
 
     }
 }

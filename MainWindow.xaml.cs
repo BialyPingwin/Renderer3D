@@ -60,11 +60,16 @@ namespace Renderer3D
             cube3.mesh = Mesh.CreateCube();
             myScene.AddObjectToScene(cube3);
 
+            SceneObject sphere1 = new SceneObject(0, 0, -10);
+            sphere1.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
+            sphere1.material = new Material(0, 255, 0);
+            myScene.AddObjectToScene(sphere1);
+
             Light light1 = new Light(0, 0, 0, new Vector3(0, 0, -1));
             myScene.AddObjectToScene(light1);
 
             camera = new Camera(testViewport, myScene);
-
+            
             
         }
 
