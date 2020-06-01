@@ -17,7 +17,7 @@ namespace Renderer3D.Engine
 
         enum Mode
         {
-            wireframe, solid, shaded
+            wireframe, solid, shaded,smoothshaded
         }
 
         Mode viewportMode;
@@ -160,54 +160,92 @@ namespace Renderer3D.Engine
                 }
             }
 
-            //int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
-            //dx = x2 - x1; dy = y2 - y1;
-            //dx1 = Math.Abs(dx); dy1 = Math.Abs(dy);
-            //px = 2 * dy1 - dx1; py = 2 * dx1 - dy1;
-            //if (dy1 <= dx1)
-            //{
-            //    if (dx >= 0)
-            //    { x = x1; y = y1; xe = x2; }
-            //    else
-            //    { x = x2; y = y2; xe = x1; }
+            
+        }
 
-            //    DrawPixel(x, y, color);
+        public void DrawSmoothLine(int x1, int y1, int x2, int y2, Color color, float lightfactor1, float lightfactor2)
+        {
 
-            //    for (i = 0; x < xe; i++)
-            //    {
-            //        x = x + 1;
-            //        if (px < 0)
-            //            px = px + 2 * dy1;
-            //        else
-            //        {
-            //            if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) y = y + 1; else y = y - 1;
-            //            px = px + 2 * (dy1 - dx1);
-            //        }
-            //        DrawPixel(x, y, color);
-            //    }
-            //}
-            //else
-            //{
-            //    if (dy >= 0)
-            //    { x = x1; y = y1; ye = y2; }
-            //    else
-            //    { x = x2; y = y2; ye = y1; }
+            if (x2 <= x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+                float ftmp = lightfactor1;
+                lightfactor1 = lightfactor2;
+                lightfactor2 = tmp;
+            }
+            if (y2 < y1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+                float ftmp = lightfactor1;
+                lightfactor1 = lightfactor2;
+                lightfactor2 = tmp;
+            }
 
-            //    DrawPixel(x, y, color);
+            if (y2 - y1 > x2 - x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
 
-            //    for (i = 0; y < ye; i++)
-            //    {
-            //        y = y + 1;
-            //        if (py <= 0)
-            //            py = py + 2 * dx1;
-            //        else
-            //        {
-            //            if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) x = x + 1; else x = x - 1;
-            //            py = py + 2 * (dx1 - dy1);
-            //        }
-            //        DrawPixel(x, y, color);
-            //    }
-            //}
+                float ftmp = lightfactor1;
+                lightfactor1 = lightfactor2;
+                lightfactor2 = tmp;
+
+            }
+
+            int deltax, deltay, g, h, c;
+            float baseDistance = Distance(x1, y1, x2, y2);
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    DrawPixel(x1, y1, Light.LuminateColor(color,actualLightFactor));
+
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
+                }
+            }
+            else
+            {
+                c = -deltay;
+                while (y1 != y2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    DrawPixel(x1, y1, Light.LuminateColor(color, actualLightFactor));
+
+
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
+                }
+            }
+
 
         }
 
@@ -221,6 +259,10 @@ namespace Renderer3D.Engine
             {
                 FillTriangle(t);
             }
+            else if (viewportMode == Mode.smoothshaded)
+            {
+                FillSmoothTriangle(t);
+            }
         }
 
         public void DrawTriangleWireframe(Triangle t)
@@ -232,12 +274,7 @@ namespace Renderer3D.Engine
 
         public void FillTriangle(Triangle t)
         {
-            //int originY = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x);
-            //int originX = (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
-            //int dimX = (int)Vector3.Max(t.p[0].x, t.p[1].x, t.p[2].x) - (int)Vector3.Min(t.p[0].x, t.p[1].x, t.p[2].x);
-            //int dimY = (int)Vector3.Max(t.p[0].y, t.p[1].y, t.p[2].y) - (int)Vector3.Min(t.p[0].y, t.p[1].y, t.p[2].y);
-
-            //int[,] toFill = new int[dimX+1, dimY+1];
+            
             Color TriangleColor = Color.FromRgb(255,255,255);
             int lineToDrop = 1;
             if (viewportMode == Mode.shaded)
@@ -253,23 +290,8 @@ namespace Renderer3D.Engine
             DrawLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor);
             DrawLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor);
 
-
-            //List<Vector3> toFillPoints = new List<Vector3>();
             Vector3 fillOrigin = new Vector3(t.p[1].x, t.p[1].y, 0);
-
-            //for (int i = 0; i < 3; i++)
-            //{
-
-            //    int j = i + 1;
-            //    if (j > 2)
-            //    {
-            //        j = 0;
-            //    }
-
-            //int x1 = (int)t.p[i].x;
-            //int y1 = (int)t.p[i].y;
-            //int x2 = (int)t.p[j].x;
-            //int y2 = (int)t.p[j].y;
+                       
 
             int x1 = (int)t.p[2].x;
             int y1 = (int)t.p[2].y;
@@ -320,8 +342,6 @@ namespace Renderer3D.Engine
                 c = -deltax;
                 while (x1 != x2)
                 {
-                    //toFill[-originX + x1, originY -y1] = 1;
-                    //toFillPoints.Add(new Vector3(x1, y1,0));
                     DrawPixel(x1, y1, TriangleColor);
                     if (lineNumber % lineToDrop == 0)
                     {
@@ -339,9 +359,6 @@ namespace Renderer3D.Engine
                 c = -deltay;
                 while (y1 != y2)
                 {
-                    //toFill[-originX +x1, originY - y1] = 1;
-
-                    //toFillPoints.Add(new Vector3(x1, y1, 0));
                     DrawPixel(x1, y1, TriangleColor);
                     if (lineNumber % lineToDrop == 0)
                     {
@@ -354,19 +371,110 @@ namespace Renderer3D.Engine
                 }
             }
 
-            //}
-
-            //int i = 0;
-            //foreach(Vector3 v in toFillPoints)
-            //{
-            //    if (i % 2 == 0)
-            //    {
-            //        DrawLine((int)fillOrigin.x, (int)fillOrigin.y, (int)v.x, (int)v.y, Color.FromRgb(255, 255, 255));
-            //    }
-            //    i++;
-            //}
         }
 
+        public void FillSmoothTriangle(Triangle t)
+        {
+
+            Color TriangleColor = t.GetColor(false);
+            
+            
+            
+            DrawSmoothLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor, t.lightFactorPerPoint[0], t.lightFactorPerPoint[1]);
+            DrawSmoothLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor, t.lightFactorPerPoint[1], t.lightFactorPerPoint[2]);
+
+            Vector3 fillOrigin = new Vector3(t.p[1].x, t.p[1].y, 0);
+
+
+            int x1 = (int)t.p[2].x;
+            int y1 = (int)t.p[2].y;
+            int x2 = (int)t.p[0].x;
+            int y2 = (int)t.p[0].y;
+
+            float lineNumber = 0;
+            float lineToDrop = 1;
+
+            float lightfactor1 = t.lightFactorPerPoint[2];
+            float lightfactor2 = t.lightFactorPerPoint[0];
+            float originLightFactor = t.lightFactorPerPoint[1];
+
+            if (x2 <= x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            if (y2 < y1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            if (y2 - y1 > x2 - x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            int deltax, deltay, g, h, c;
+            float baseDistance = Distance(x1, y1, x2, y2);
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    DrawPixel(x1, y1, Light.LuminateColor(TriangleColor, actualLightFactor));
+                    if (lineNumber % lineToDrop == 0)
+                    {
+                        DrawSmoothBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4, originLightFactor, actualLightFactor);
+                    }
+                    lineNumber++;
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
+                }
+            }
+            else
+            {
+                c = -deltay;
+                while (y1 != y2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    DrawPixel(x1, y1, Light.LuminateColor(TriangleColor, actualLightFactor));
+                    if (lineNumber % lineToDrop == 0)
+                    {
+                        DrawSmoothBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4, originLightFactor, actualLightFactor);
+                    }
+                    lineNumber++;
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
+                }
+            }
+
+        }
 
         public WriteableBitmap ShowViewport()
         {
@@ -460,6 +568,89 @@ namespace Renderer3D.Engine
             }
         }
 
+        public void DrawSmoothBoldLine(int x1, int y1, int x2, int y2, Color color, int bold, float lightfactor1, float lightfactor2)
+        {
+            if (x2 <= x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+            if (y2 < y1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            if (y2 - y1 > x2 - x1)
+            {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
+
+            int deltax, deltay, g, h, c;
+            float baseDistance = Distance(x1, y1, x2, y2);
+            deltax = x2 - x1;
+            if (deltax > 0) g = +1; else g = -1;
+            deltax = Math.Abs(deltax);
+            deltay = y2 - y1;
+            if (deltay > 0) h = +1; else h = -1;
+            deltay = Math.Abs(deltay);
+            if (deltax > deltay)
+            {
+                c = -deltax;
+                while (x1 != x2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    
+
+                    for (int i = -(int)bold / 2; i < (int)bold / 2; i++)
+                    {
+                        DrawPixel(x1, y1 + i, Light.LuminateColor(color, actualLightFactor));
+                    }
+
+
+                    c += 2 * deltay;
+                    if (c > 0) { y1 += h; c -= 2 * deltax; }
+                    x1 += g;
+                }
+            }
+            else
+            {
+                c = -deltay;
+                while (y1 != y2)
+                {
+                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
+
+                    
+
+                    for (int i = -(int)bold / 2; i < (int)bold / 2; i++)
+                    {
+                        DrawPixel(x1 + i, y1, Light.LuminateColor(color, actualLightFactor));
+                    }
+
+
+                    c += 2 * deltax;
+                    if (c > 0) { x1 += g; c -= 2 * deltay; }
+                    y1 += h;
+                }
+            }
+        }
+
 
 
         public void ClearViewport()
@@ -487,10 +678,17 @@ namespace Renderer3D.Engine
             {
                 viewportMode = Mode.shaded;
             }
+            else if (i == 4)
+            {
+                viewportMode = Mode.smoothshaded;
+            }
         }
         
     
-
+        private float Distance(int x1, int y1, int x2, int y2)
+        {
+            return (float)Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+        }
         
     }
 }

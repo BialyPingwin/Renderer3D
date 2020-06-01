@@ -48,17 +48,17 @@ namespace Renderer3D
             myScene = new Scene();
 
             SceneObject cube = new SceneObject(0, 0, 1);
-            cube.mesh = Mesh.CreateCube();
+            cube.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
             cube.material = new Material(255, 0, 0);
             myScene.AddObjectToScene(cube);
 
-            SceneObject cube2 = new SceneObject(6, 0, 3);
-            cube2.mesh = Mesh.CreateCube();
-            myScene.AddObjectToScene(cube2);
+            //SceneObject cube2 = new SceneObject(6, 0, 3);
+            //cube2.mesh = Mesh.CreateCube();
+            //myScene.AddObjectToScene(cube2);
 
-            SceneObject cube3 = new SceneObject(-1.05f, 0, 1);
-            cube3.mesh = Mesh.CreateCube();
-            myScene.AddObjectToScene(cube3);
+            //SceneObject cube3 = new SceneObject(-1.05f, 0, 1);
+            //cube3.mesh = Mesh.CreateCube();
+            //myScene.AddObjectToScene(cube3);
 
             SceneObject sphere1 = new SceneObject(0, 0, -10);
             sphere1.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
@@ -111,6 +111,10 @@ namespace Renderer3D
             if (e.Key == Key.D3)
             {
                 testViewport.RenderMode(3);
+            }
+            if (e.Key == Key.D4)
+            {
+                testViewport.RenderMode(4);
             }
             if (e.Key == Key.A)
             {

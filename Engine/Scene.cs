@@ -58,6 +58,11 @@ namespace Renderer3D.Engine
                         foreach (Light l in translatedLights)
                         {
                             inScene.lightFactor = l.GetLightFactor(inScene.GetNormal());
+                            //optymalizacja by się przydała, żeby sprawdzało sie tylko gdy vieport ma włączone smooth shading
+                            for (int i = 0; i < 3; i++)
+                            {
+                                inScene.lightFactorPerPoint[i] = l.GetLightFactor(inScene.GetNormalPoint(i));
+                            }
                         }
 
                         Triangle newT = Triangle.RotateTriangle(Triangle.TranslatedTriangle(inScene, moveSceneVector),sceneRotation);
