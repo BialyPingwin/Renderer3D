@@ -12,7 +12,7 @@ namespace Renderer3D.Engine
         public float Vertical = 0f;
         public float Rotation = 0f;
         public float MoveSpeed = 0.1f;
-        public float RotationSpeed = 0.1f;
+        public float RotationSpeed = 2f;
 
         public Vector3 GetControls()
         {

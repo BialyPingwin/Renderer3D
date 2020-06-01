@@ -128,8 +128,16 @@ namespace Renderer3D.Engine
             }
         }
 
+        public void RotateX(float fi)
+        {
+            fi *= (float)Math.PI / 180f;
+
+        }
+
         public void RotateY(float fi)
         {
+            fi *= (float)Math.PI / 180f;
+
             Vector3 ret = new Vector3();
             ret.x = (float)(this.x * Math.Cos(fi) + this.z * Math.Sin(fi));
             ret.y = this.y;
@@ -137,6 +145,26 @@ namespace Renderer3D.Engine
             this.x = ret.x;
             this.y = ret.y;
             this.z = ret.z;
+        }
+
+        public void RotateZ(float fi)
+        {
+            //fi *= (float)Math.PI / 180f;
+            //Vector3 ret = new Vector3();
+            //ret.x = (float)(this.x * Math.Cos(fi) + this.z * Math.Sin(fi));
+            //ret.y = this.y;
+            //ret.z = (float)(this.x * -Math.Sin(fi) + this.z * Math.Cos(fi));
+            //this.x = ret.x;
+            //this.y = ret.y;
+            //this.z = ret.z;
+
+        }
+
+        public void Scale(Vector3 scale)
+        {
+            this.x *= scale.x;
+            this.y *= scale.y;
+            this.z *= scale.z;
         }
     }
 }

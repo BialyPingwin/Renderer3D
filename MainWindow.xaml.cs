@@ -47,9 +47,9 @@ namespace Renderer3D
 
             myScene = new Scene();
 
-            SceneObject cube = new SceneObject(0, 0, 1);
+            SceneObject cube = new SceneObject(0, 0, 30);
             cube.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
-            cube.material = new Material(255, 0, 0);
+            cube.material = new Material(194, 178, 128);
             myScene.AddObjectToScene(cube);
 
             //SceneObject cube2 = new SceneObject(6, 0, 3);
