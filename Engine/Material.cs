@@ -10,8 +10,7 @@ namespace Renderer3D.Engine
     class Material
     {
         Color baseColor;
-        float roughness;
-
+        
         public Material(int R, int G, int B)
         {
             baseColor = Color.FromRgb((byte)R, (byte)G, (byte)B);

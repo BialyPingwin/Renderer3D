@@ -29,7 +29,7 @@ namespace Renderer3D
         Camera camera;
         Controls controls;
         Scene myScene;
-
+        Animator animator1;
         public MainWindow()
         {
             InitializeComponent();
@@ -63,6 +63,11 @@ namespace Renderer3D
             cube3.mesh = Mesh.CreateCube();
             myScene.AddObjectToScene(cube3);
 
+            SceneObject plane = new SceneObject(-5f, 0, 1);
+            plane.mesh = Mesh.LoadFromObj(@"Assets\plane.obj");
+            plane.rotation = new Vector3(45, 0, 45);
+            myScene.AddObjectToScene(plane);
+
             SceneObject sphere1 = new SceneObject(0, 0, -10);
             sphere1.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
             sphere1.material = new Material(0, 255, 0);
@@ -72,8 +77,8 @@ namespace Renderer3D
             myScene.AddObjectToScene(light1);
 
             camera = new Camera(testViewport, myScene);
-            
-            
+
+            animator1 = new Animator(cube);
         }
 
         void Update(object sender, EventArgs e)
@@ -82,6 +87,11 @@ namespace Renderer3D
             camera.Render();
             myScene.MoveScene(controls.GetControls());
             myScene.RotateScene(controls.GetRotation());
+            animator1.Animate((animator1) =>
+            {
+                animator1.position.Add(new Vector3(0f, 0f, -0.1f));
+                return animator1;
+            });
         }
 
         private void InputKeyDown(object sender, KeyEventArgs e)
