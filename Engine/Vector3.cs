@@ -31,25 +31,28 @@ namespace Renderer3D.Engine
             return new Vector3(0, 0, 0);
         }
 
-        public void Add(Vector3 v)
+        public Vector3 Add(Vector3 v)
         {
             this.x += v.x;
             this.y += v.y;
             this.z += v.z;
+            return this;
         }
 
-        public void Mul(float f)
+        public Vector3 Mul(float f)
         {
             this.x *= f;
             this.y *= f;
             this.z *= f;
+            return this;
         }
 
-        public void Sub(Vector3 v)
+        public Vector3 Sub(Vector3 v)
         {
             this.x -= v.x;
             this.y -= v.y;
             this.z -= v.z;
+            return this;
         }
 
         public static Vector3 Sub(Vector3 A, Vector3 B)
@@ -86,12 +89,13 @@ namespace Renderer3D.Engine
             return ret;
         }
 
-        public void Normalize()
+        public Vector3 Normalize()
         {
             float l = (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
             this.x /= l;
             this.y /= l;
             this.z /= l;
+            return this;
         }
 
         public static float Max(float x, float y, float z)

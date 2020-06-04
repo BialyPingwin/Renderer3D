@@ -67,6 +67,7 @@ namespace Renderer3D.Engine
                             for (int i = 0; i < 3; i++)
                             {
                                 inScene.lightFactorPerPoint[i] = l.GetLightFactor(inScene.GetNormalPoint(i));
+                                //.Sub(Vector3.VectorFromPoints(inScene.GetCenter(),inScene.p[i]).Normalize().Mul(0.2f)).Normalize()
                             }
                         }
 
@@ -75,7 +76,7 @@ namespace Renderer3D.Engine
                         if (newT.p[0].z > 0.5f && newT.p[1].z > 0.5f && newT.p[2].z > 0.5f)
                         {
                             Vector3 normal = newT.GetNormal();
-                            Vector3 newP = Vector3.Sub(newT.p[0], new Vector3(0.4f, 0f, 0.4f));
+                            Vector3 newP = Vector3.Sub(newT.p[0], new Vector3(0.5f, 0.5f, 0.5f));
                             if (Vector3.DotProduct(normal, newP) <= 0)
                             {
                                 tris.Add(newT);
