@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -27,7 +28,7 @@ namespace Renderer3D.Engine
 
             this.width = width;
             this.height = height;
-            viewportMode = Mode.shaded;
+            viewportMode = Mode.smoothshaded;
         }
 
         public void DrawPixel(int column, int row, Color color)
@@ -163,7 +164,7 @@ namespace Renderer3D.Engine
             
         }
 
-        public void DrawSmoothLine(int x1, int y1, int x2, int y2, Color color, float lightfactor1, float lightfactor2)
+        public void DrawSmoothLine(int x1, int y1, int x2, int y2, Color color, float lightfactor2, float lightfactor1)
         {
 
             if (x2 <= x1)
@@ -219,7 +220,7 @@ namespace Renderer3D.Engine
                 c = -deltax;
                 while (x1 != x2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor = Distance(x1, y1, x2, y2) / baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     DrawPixel(x1, y1, Light.LuminateColor(color,actualLightFactor));
@@ -234,7 +235,7 @@ namespace Renderer3D.Engine
                 c = -deltay;
                 while (y1 != y2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor = Distance(x1, y1, x2, y2) / baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     DrawPixel(x1, y1, Light.LuminateColor(color, actualLightFactor));
@@ -380,8 +381,7 @@ namespace Renderer3D.Engine
             
             
             
-            DrawSmoothLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor, t.lightFactorPerPoint[0], t.lightFactorPerPoint[1]);
-            DrawSmoothLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor, t.lightFactorPerPoint[1], t.lightFactorPerPoint[2]);
+            //DrawSmoothLine((int)t.p[1].x, (int)t.p[1].y, (int)t.p[2].x, (int)t.p[2].y, TriangleColor, t.lightFactorPerPoint[1], t.lightFactorPerPoint[2]);
 
             Vector3 fillOrigin = new Vector3(t.p[1].x, t.p[1].y, 0);
 
@@ -440,13 +440,15 @@ namespace Renderer3D.Engine
                 c = -deltax;
                 while (x1 != x2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor =Distance(x1, y1, x2, y2) /baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     DrawPixel(x1, y1, Light.LuminateColor(TriangleColor, actualLightFactor));
+                    
                     if (lineNumber % lineToDrop == 0)
                     {
                         DrawSmoothBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4, originLightFactor, actualLightFactor);
+                        
                     }
                     lineNumber++;
                     c += 2 * deltay;
@@ -459,13 +461,15 @@ namespace Renderer3D.Engine
                 c = -deltay;
                 while (y1 != y2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor = Distance(x1, y1, x2, y2) / baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     DrawPixel(x1, y1, Light.LuminateColor(TriangleColor, actualLightFactor));
+                    
                     if (lineNumber % lineToDrop == 0)
                     {
                         DrawSmoothBoldLine((int)fillOrigin.x, (int)fillOrigin.y, x1, y1, TriangleColor, 4, originLightFactor, actualLightFactor);
+                        
                     }
                     lineNumber++;
                     c += 2 * deltax;
@@ -473,6 +477,7 @@ namespace Renderer3D.Engine
                     y1 += h;
                 }
             }
+            //DrawSmoothBoldLine((int)t.p[0].x, (int)t.p[0].y, (int)t.p[1].x, (int)t.p[1].y, TriangleColor,4, t.lightFactorPerPoint[0], t.lightFactorPerPoint[1]);
 
         }
 
@@ -568,7 +573,7 @@ namespace Renderer3D.Engine
             }
         }
 
-        public void DrawSmoothBoldLine(int x1, int y1, int x2, int y2, Color color, int bold, float lightfactor1, float lightfactor2)
+        public void DrawSmoothBoldLine(int x1, int y1, int x2, int y2, Color color, int bold, float lightfactor2, float lightfactor1)
         {
             if (x2 <= x1)
             {
@@ -612,7 +617,7 @@ namespace Renderer3D.Engine
                 c = -deltax;
                 while (x1 != x2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor = Distance(x1, y1, x2, y2) / baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     
@@ -633,7 +638,7 @@ namespace Renderer3D.Engine
                 c = -deltay;
                 while (y1 != y2)
                 {
-                    float actualDistanceFactor = (baseDistance - Distance(x1, y1, x2, y2) / baseDistance);
+                    float actualDistanceFactor = Distance(x1, y1, x2, y2) / baseDistance;
                     float actualLightFactor = Light.LightFactorInterpolation(lightfactor1, lightfactor2, actualDistanceFactor);
 
                     

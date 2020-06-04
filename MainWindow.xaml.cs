@@ -48,7 +48,22 @@ namespace Renderer3D
 
             myScene = new Scene();
 
-            SceneObject cube = new SceneObject(0, 0, 30);
+            //Triangle test = new Triangle(1f, 1f, 1f, 100.0f, 100.0f, 1f, 100.0f, 1f, 1f);
+            //test.color = Color.FromRgb(255, 0, 0);
+            //test.lightFactorPerPoint[0] = 0.2f;
+            //test.lightFactorPerPoint[1] = 1f;
+            //test.lightFactorPerPoint[2] = 0f;
+            //testViewport.FillSmoothTriangle(test);
+            //Triangle test1 = new Triangle(1f, 1f, 1f, 1f, 100f, 1f, 100.0f, 100.0f, 1f);
+            //test1.color = Color.FromRgb(255, 0, 0);
+            //test1.lightFactorPerPoint[0] = 0.2f;
+            //test1.lightFactorPerPoint[1] = 0f;
+            //test1.lightFactorPerPoint[2] = 1f;
+            //testViewport.FillSmoothTriangle(test1);
+
+
+            //testViewport.DrawSmoothLine(0, 200, 300, 200, Color.FromRgb(0, 255, 0),1, 0);
+            SceneObject cube = new SceneObject(0, 0, 10);
             cube.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
             cube.material = new Material(194, 178, 128);
             myScene.AddObjectToScene(cube);
@@ -86,7 +101,7 @@ namespace Renderer3D
 
         void Update(object sender, EventArgs e)
         {
-            
+
             camera.Render();
             myScene.MoveScene(controls.GetControls());
             myScene.RotateScene(controls.GetRotation());

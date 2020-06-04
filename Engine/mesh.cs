@@ -19,8 +19,8 @@ namespace Renderer3D.Engine
         {
             Mesh wall = new Mesh();
             wall.Tris = new Triangle[2];
-            wall.Tris[0] = new Triangle(0, 0, 0, 0, 1, 0, 1, 1, 0);
-            wall.Tris[1] = new Triangle(0, 0, 0, 1, 1, 0, 1, 0, 0);
+            wall.Tris[0] = new Triangle(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f);
+            wall.Tris[1] = new Triangle(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
 
             return wall;
         }
