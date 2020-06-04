@@ -30,6 +30,7 @@ namespace Renderer3D
         Controls controls;
         Scene myScene;
         Animator animator1;
+        Animator animator2;
         public MainWindow()
         {
             InitializeComponent();
@@ -79,6 +80,8 @@ namespace Renderer3D
             camera = new Camera(testViewport, myScene);
 
             animator1 = new Animator(cube);
+            animator1.opts.Add(false);
+            animator2 = new Animator(sphere1);
         }
 
         void Update(object sender, EventArgs e)
@@ -87,10 +90,32 @@ namespace Renderer3D
             camera.Render();
             myScene.MoveScene(controls.GetControls());
             myScene.RotateScene(controls.GetRotation());
-            animator1.Animate((animator1) =>
+            animator1.Animate((animator) =>
             {
-                animator1.position.Add(new Vector3(0f, 0f, -0.1f));
-                return animator1;
+
+                if (animator1.opts[0] == false)
+                {
+                    animator.position.Add(new Vector3(-0.5f, 0f, 0f));
+                    if (animator.position.x < -5f)
+                    {
+                        animator1.opts[0] = true;
+                    }
+                }
+                else
+                {
+                    animator.position.Add(new Vector3(0.2f, 0f, 0f));
+                    if (animator.position.x > 5f)
+                    {
+                        animator1.opts[0] = false;
+                    }
+                }
+                return animator;
+            });
+
+            animator2.Animate((animator) =>
+            {
+                animator.rotation.Add(new Vector3(0.5f, 0f, 0f));
+                return animator;
             });
         }
 

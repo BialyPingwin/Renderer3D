@@ -10,11 +10,11 @@ namespace Renderer3D.Engine
     class Animator
     {
         SceneObject sceneObject;
-
+        public List<bool> opts;
         public Animator(SceneObject sceneObject)
         {
             this.sceneObject = sceneObject;
-            
+            opts = new List<bool>();
         }
 
         public void Animate(Func<SceneObject, SceneObject> func)

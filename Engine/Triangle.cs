@@ -141,6 +141,15 @@ namespace Renderer3D.Engine
             return n;
         }
 
+        public Vector3 GetCenter()
+        {
+            Vector3 ret = new Vector3();
+            ret.x = (p[0].x + p[1].x + p[2].x) / 3.0f;
+            ret.y = (p[0].y + p[1].y + p[2].y) / 3.0f;
+            ret.z = (p[0].z + p[1].z + p[2].z) / 3.0f;
+            return ret;
+        }
+
     }
 
     class TriangleComparerByZ : Comparer<Triangle>
