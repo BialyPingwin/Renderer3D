@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize" KeyDown="InputKeyDown" KeyUp="InputKeyUp">
     <Grid>
         <Image x:Name="ViewportWindow" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Movement: arrow keys Look L/R: A/D              UP/DOWN: space/ctrl Render mode: Wireframe: 1 Unlit: 2  Flat_shading: 3 Gouraud_shading: 4 " VerticalAlignment="Top" Height="118" Width="129" Foreground="White"/>
 
     </Grid>
 </Window>
