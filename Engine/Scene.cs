@@ -63,11 +63,9 @@ namespace Renderer3D.Engine
                         foreach (Light l in translatedLights)
                         {
                             inScene.lightFactor = l.GetLightFactor(inScene.GetNormal());
-                            //optymalizacja by się przydała, żeby sprawdzało sie tylko gdy vieport ma włączone smooth shading
                             for (int i = 0; i < 3; i++)
                             {
                                 inScene.lightFactorPerPoint[i] = l.GetLightFactor(inScene.GetNormalPoint(i));
-                                //.Sub(Vector3.VectorFromPoints(inScene.GetCenter(),inScene.p[i]).Normalize().Mul(0.2f)).Normalize()
                             }
                         }
 
@@ -82,7 +80,6 @@ namespace Renderer3D.Engine
                                 tris.Add(newT);
                             }
                         }
-                        //translate with scene objects coordinate;
                     }
                 }
             }

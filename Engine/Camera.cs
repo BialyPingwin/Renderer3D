@@ -15,8 +15,8 @@ namespace Renderer3D.Engine
         float nearClippingPlane = 0.1f;
         float farClippingPlane = 1000f;
         float Fov = 90.0f;
-        float AspectRatio; ///from viewport h/w
-        float FovRad;// = 1.0f / Math.Tan(Fov * 0.5f / 180.0f * Math.PI);
+        float AspectRatio; 
+        float FovRad;
         
         public Camera(Viewport viewport, Scene scene)
         {
@@ -55,10 +55,7 @@ namespace Renderer3D.Engine
             viewport.ClearViewport();
             foreach (Triangle t in trisToRender)
             {
-                //t.p[0].z += 3f;
-                //t.p[1].z += 3f;
-                //t.p[2].z += 3f;
-
+                
                 t.p[0].x += -0.5f;
                 t.p[1].x += -0.5f;
                 t.p[2].x += -0.5f;
@@ -67,7 +64,6 @@ namespace Renderer3D.Engine
                 t.p[1].y += -0.5f;
                 t.p[2].y += -0.5f;
 
-                ///System.Windows.MessageBox.Show(t.p[0].x +" " + t.p[0].y+" " +t.p[0].z) ;
 
                 t.p[0] = Project(t.p[0]);
                 t.p[1] = Project(t.p[1]);

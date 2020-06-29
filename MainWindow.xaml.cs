@@ -48,21 +48,7 @@ namespace Renderer3D
 
             myScene = new Scene();
 
-            //Triangle test = new Triangle(1f, 1f, 1f, 100.0f, 100.0f, 1f, 100.0f, 1f, 1f);
-            //test.color = Color.FromRgb(255, 0, 0);
-            //test.lightFactorPerPoint[0] = 0.2f;
-            //test.lightFactorPerPoint[1] = 1f;
-            //test.lightFactorPerPoint[2] = 0f;
-            //testViewport.FillSmoothTriangle(test);
-            //Triangle test1 = new Triangle(1f, 1f, 1f, 1f, 100f, 1f, 100.0f, 100.0f, 1f);
-            //test1.color = Color.FromRgb(255, 0, 0);
-            //test1.lightFactorPerPoint[0] = 0.2f;
-            //test1.lightFactorPerPoint[1] = 0f;
-            //test1.lightFactorPerPoint[2] = 1f;
-            //testViewport.FillSmoothTriangle(test1);
-
-
-            //testViewport.DrawSmoothLine(0, 200, 300, 200, Color.FromRgb(0, 255, 0),1, 0);
+            
             SceneObject cube = new SceneObject(0, 0, 10);
             cube.mesh = Mesh.LoadFromObj(@"Assets\icosphere.obj");
             cube.material = new Material(194, 178, 128);
@@ -118,7 +104,7 @@ namespace Renderer3D
                 }
                 else
                 {
-                    animator.position.Add(new Vector3(0.2f, 0f, 0f));
+                    animator.position.Add(new Vector3(0.5f, 0f, 0f));
                     if (animator.position.x > 5f)
                     {
                         animator1.opts[0] = false;
